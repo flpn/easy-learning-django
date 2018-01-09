@@ -25,6 +25,11 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('forum:detail', kwargs={'slug': self.slug})
 
+    def increment_visualization(self):
+        self.views += 1
+        self.save()
+
+
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

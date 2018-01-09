@@ -10,4 +10,7 @@ class QuestionListView(ListView):
 
 class QuestionDetailView(DetailView):
     def get_object(self, *args, **kwargs):
-        return Question.objects.get(slug=self.kwargs['slug'])
+        question = Question.objects.get(slug=self.kwargs['slug'])
+        question.increment_visualization()
+        
+        return question
