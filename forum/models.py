@@ -13,10 +13,10 @@ class Question(models.Model):
     text = models.TextField(max_length=500)
     views = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    tags = models.TextField()
+    tags = models.TextField(help_text='Separar tags por vírgula.')
     published = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return self.title
