@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import pre_save
+from django.urls import reverse
 
 from .utils import unique_slug_generator
 
@@ -20,6 +21,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('forum:detail', kwargs={'slug': self.slug})
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
