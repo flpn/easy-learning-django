@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Perguntas || {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h3>{{ question }}</h3>
+
+    <p>{{ question.text }}</p>
+{% endblock  %}
+    
