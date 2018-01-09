@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Question
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    readonly_fields = ('views', 'score')
+
+
+admin.site.register(Question, QuestionAdmin)
