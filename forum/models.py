@@ -29,6 +29,13 @@ class Question(models.Model):
         self.views += 1
         self.save()
 
+    def like(self):
+        self.score += 1
+        self.save()
+
+    def dislike(self):
+        self.score -= 1
+        self.save()
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
