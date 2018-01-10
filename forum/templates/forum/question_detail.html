@@ -4,6 +4,9 @@
 
 {% block content %}
     <h3>{{ question }}</h3>
+    <small><p><a href="{% url 'forum:update' question.slug %}">Atualizar</a> 
+        <a href="{% url 'forum:delete' question.slug %}">Excluir</a></p></small>
+        
     <p>{{ question.text }}</p>
     <p>Visualizações: {{ question.views }}</p>
     <p>Pontuação: <a class="like-btn" id="like-btn" data-href="{{ question.get_toggle_like_api_url }}" data-likes="{{ question.likes.count }}" href="{{ question.get_toggle_like_url }}"> {{ question.likes.count }} Avaliar</a></p>

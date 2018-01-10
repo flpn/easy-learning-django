@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
-
 {% block head_title %}Perguntas || {{ block.super }}{% endblock %}
 
-
 {% block content %}
-    <h3>Perguntas</h3>
+    <p><h3>Perguntas</h3> <small><a href="{% url 'forum:create' %}" >Adicionar pergunta</a></small></p>
 
     </ul>
         {% for question in question_list %}
