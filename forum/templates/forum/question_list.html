@@ -5,6 +5,11 @@
 {% block content %}
     <p><h3>Perguntas</h3> <small><a href="{% url 'forum:create' %}" >Adicionar pergunta</a></small></p>
 
+    <form action="" method="get">
+        <input type="text" name="query" placeholder="Pesquise aqui..." value="{{ request.GET.query }}">
+        <button type="submit">Pesquisar</button>
+    </form>
+
     </ul>
         {% for question in question_list %}
             <li><a href="{{ question.get_absolute_url }}">{{ question }}</a></li>

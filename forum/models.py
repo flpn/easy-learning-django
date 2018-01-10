@@ -2,11 +2,32 @@ from django.db import models
 from django.conf import settings
 from django.db.models.signals import pre_save
 from django.urls import reverse
+from django.db.models import Q
 
 from .utils import unique_slug_generator
 
 
 User = settings.AUTH_USER_MODEL
+
+class QuestionQuerySet(models.query.QuerySet):
+    def search(self, query):
+        query = query.strip()
+
+        return self.filter(
+            Q(title__iexact=query)|
+            Q(title__icontains=query)|
+            Q(tags__iexact=query)|
+            Q(tags__icontains=query)
+        ).distinct()
+
+
+class QuestionManager(models.Manager):
+    def get_queryset(self):
+        return QuestionQuerySet(self.model, using=self._db)
+
+    def search(self, query):
+        return self.get_queryset().search(query)
+
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,6 +39,8 @@ class Question(models.Model):
     published = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     slug = models.SlugField(max_length=200, blank=True, null=True)
+
+    objects = QuestionManager()
 
     class Meta:
         ordering = ['-published']
@@ -37,12 +60,6 @@ class Question(models.Model):
     def increment_visualization(self):
         self.views += 1
         self.save()
-
-    def like(self):
-        pass
-
-    def dislike(self):
-        pass
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):

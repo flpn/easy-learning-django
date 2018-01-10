@@ -13,7 +13,15 @@ from .forms import QuestionForm
 
 
 class QuestionListView(ListView):
-    model = Question
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        
+        if query:
+            queryset = Question.objects.all().search(query)
+        else:
+            queryset = Question.objects.all()
+            
+        return queryset
 
 
 class QuestionDetailView(DetailView):
