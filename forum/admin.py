@@ -4,7 +4,7 @@ from .models import Question
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    readonly_fields = ('views', 'score')
+    readonly_fields = ('views',)
 
 
 admin.site.register(Question, QuestionAdmin)

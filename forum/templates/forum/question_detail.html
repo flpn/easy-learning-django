@@ -6,8 +6,9 @@
     <h3>{{ question }}</h3>
     <p>{{ question.text }}</p>
     <p>Visualizações: {{ question.views }}</p>
-    <p>Score: <a href="{% url 'forum:like' question.slug %}">Like</a> {{ question.score }} <a href="{% url 'forum:dislike' question.slug %}">Dislike</a></p>
+    <p>Pontuação: <a class="like-btn" id="like-btn" data-href="{{ question.get_toggle_like_api_url }}" data-likes="{{ question.likes.count }}" href="{{ question.get_toggle_like_url }}"> {{ question.likes.count }} Avaliar</a></p>
     <p>Tags: {{ question.tags }}</p>
     <p>Criado há: {{ question.published|timesince }}</p>
 {% endblock  %}
+
     

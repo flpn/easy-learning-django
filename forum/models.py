@@ -13,7 +13,7 @@ class Question(models.Model):
     title = models.CharField(max_length=120)
     text = models.TextField(max_length=500)
     views = models.IntegerField(default=0)
-    score = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='likes')
     tags = models.TextField(help_text='Separar tags por vírgula.')
     published = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -25,17 +25,21 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('forum:detail', kwargs={'slug': self.slug})
 
+    def get_toggle_like_url(self):
+        return reverse('forum:toggle-like', kwargs={'slug': self.slug})
+
+    def get_toggle_like_api_url(self):
+        return reverse('forum:toggle-like-api', kwargs={'slug': self.slug})
+
     def increment_visualization(self):
         self.views += 1
         self.save()
 
     def like(self):
-        self.score += 1
-        self.save()
+        pass
 
     def dislike(self):
-        self.score -= 1
-        self.save()
+        pass
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
