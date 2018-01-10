@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, RedirectView, CreateView
+from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,15 +18,13 @@ class QuestionListView(ListView):
 
 class QuestionDetailView(DetailView):
     def get_object(self, *args, **kwargs):
-        print(self.request)
-
         question = Question.objects.get(slug=self.kwargs['slug'])
         question.increment_visualization()
 
         return question
 
 
-class QuestionCreateView(CreateView):
+class QuestionCreateView(LoginRequiredMixin, CreateView):
     form_class = QuestionForm
     template_name = 'forum/question_create.html'
 
@@ -34,6 +33,12 @@ class QuestionCreateView(CreateView):
         instance.user = self.request.user
 
         return super(QuestionCreateView, self).form_valid(form)
+
+
+class QuestionUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'forum/question_update.html'
+    form_class = QuestionForm
+    model = Question
 
 
 class QuestionToggleLike(RedirectView):
