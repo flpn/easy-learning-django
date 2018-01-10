@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block head_title %}Criar nova pergunta || {{ block.super }}{% endblock  %}
+
+{% block content %}
+    <h1>Nova pergunta</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submmit">Criar pergunta</button>
+    </form>
+{% endblock  %}

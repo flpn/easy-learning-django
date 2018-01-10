@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, RedirectView
+from django.views.generic import ListView, DetailView, RedirectView, CreateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
 from .models import Question
+from .forms import QuestionForm
 
 
 class QuestionListView(ListView):
@@ -22,6 +23,17 @@ class QuestionDetailView(DetailView):
         question.increment_visualization()
 
         return question
+
+
+class QuestionCreateView(CreateView):
+    form_class = QuestionForm
+    template_name = 'forum/question_create.html'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+
+        return super(QuestionCreateView, self).form_valid(form)
 
 
 class QuestionToggleLike(RedirectView):
