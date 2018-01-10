@@ -15,12 +15,16 @@ from .forms import QuestionForm
 class QuestionListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
-        
+        ordering = self.request.GET.get('ordering')
+
         if query:
             queryset = Question.objects.all().search(query)
         else:
             queryset = Question.objects.all()
-            
+
+        if ordering:
+            queryset = queryset.order_by(ordering)
+
         return queryset
 
 

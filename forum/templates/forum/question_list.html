@@ -5,9 +5,17 @@
 {% block content %}
     <p><h3>Perguntas</h3> <small><a href="{% url 'forum:create' %}" >Adicionar pergunta</a></small></p>
 
-    <form action="" method="get">
+    <form method="get">
         <input type="text" name="query" placeholder="Pesquise aqui..." value="{{ request.GET.query }}">
         <button type="submit">Pesquisar</button>
+
+        <select name="ordering">
+            <option value="">Selecione</option>
+            <option value="-published">Data</option>
+            <option value="-views">Visualização</option>
+        </select>
+
+        <button type="submit">Ordenar</button>
     </form>
 
     </ul>
