@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework.views import APIView
@@ -39,6 +39,11 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'forum/question_update.html'
     form_class = QuestionForm
     model = Question
+
+
+class QuestionDeleteView(DeleteView):
+    model = Question
+    success_url = reverse_lazy('forum:questions')
 
 
 class QuestionToggleLike(RedirectView):
