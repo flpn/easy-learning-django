@@ -65,8 +65,8 @@ class Question(models.Model):
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text = models.CharField(max_length=500)
-    likes = models.ManyToManyField(User, related_name='answer_likes')
+    text = models.TextField(max_length=500)
+    likes = models.ManyToManyField(User, related_name='answer_likes', blank=True)
     published = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

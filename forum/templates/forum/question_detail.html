@@ -12,6 +12,25 @@
     <p>Pontuação: <a class="like-btn" id="like-btn" data-href="{{ question.get_toggle_like_api_url }}" data-likes="{{ question.likes.count }}" href="{{ question.get_toggle_like_url }}"> {{ question.likes.count }} Avaliar</a></p>
     <p>Tags: {{ question.tags }}</p>
     <p>Criado há: {{ question.published|timesince }}</p>
+
+    <h3>{{ question.answer_set.count }} Resposta{{ question.answer_set.count|pluralize }}</h3>
+    <hr>
+
+    {% for answer in question.answer_set.all %}
+        <div class="row">
+            <p>{{ answer.text }}</p>
+            <small>por: {{ answer.user.username }}</small>
+        </div>    
+        
+        {% empty %}
+        <p>Nenhuma resposta foi publicada.</p>
+    {% endfor %}
+    
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="" id="" cols="30" rows="5"></textarea>
+        <button type="submit">Responder</button>
+    </form>
 {% endblock  %}
 
     
