@@ -51,7 +51,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'easy_learning_django.urls'
+
 LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 TEMPLATES = [
     {
