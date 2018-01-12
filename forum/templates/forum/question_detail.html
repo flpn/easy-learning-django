@@ -14,9 +14,17 @@
     <p>Criado há: {{ question.published|timesince }}</p>
 
     <h3>{{ question.answer_set.count }} Resposta{{ question.answer_set.count|pluralize }}</h3>
+    
+    <form method="post" action="{% url 'forum:answer' question.slug %}">
+        {% csrf_token %}
+        <input type="text" hidden name="slug" value="{{ question.slug }}">
+
+        {{ form.as_p }}
+        <button type="submit">Responder</button>
+    </form>
     <hr>
 
-    {% for answer in question.answer_set.all %}
+    {% for answer in question.answer_set.all reversed %}
         <p>{{ answer.text }} </p><br/>
         <p><small> por: {{ answer.user.username }}</small></p>
         <hr>
@@ -25,12 +33,6 @@
         <p>Nenhuma resposta foi publicada.</p>
     {% endfor %}
     
-    <form method="post" action="{% url 'forum:answer' question.slug %}">
-        {% csrf_token %}
-        <input hidden type="text" name="slug" value="{{ question.slug }}">
-        <textarea name="text" id="" cols="30" rows="5"></textarea>
-        <button type="submit">Responder</button>
-    </form>
 {% endblock  %}
 
     

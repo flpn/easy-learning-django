@@ -73,6 +73,9 @@ class Answer(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.user.username, self.text)
 
+    def get_absolute_url(self):
+        return reverse('forum:detail', kwargs={'slug':self.question.slug})
+
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

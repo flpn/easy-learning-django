@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView, View
+from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
 from .models import Question, Answer
-from .forms import QuestionForm
+from .forms import QuestionForm, AnswerForm
 
 
 class QuestionListView(ListView):
@@ -29,6 +29,12 @@ class QuestionListView(ListView):
 
 
 class QuestionDetailView(DetailView):
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['form'] = AnswerForm
+        
+        return context
+
     def get_object(self, *args, **kwargs):
         question = Question.objects.get(slug=self.kwargs['slug'])
         question.increment_visualization()
@@ -98,13 +104,19 @@ class QuestionToggleLikeAPI(APIView):
         return Response(data)
 
 
-class CreateAnswer(View):
-    def post(self, request, *args, **kwargs):
-        user = self.request.user
+class AnswerCreate(CreateView):
+    template_name = 'forum/question_detail.html'
+    form_class = AnswerForm
+
+    def form_valid(self, form):
         slug = self.request.POST.get('slug')
-        question = get_object_or_404(Question, slug=slug)
-        text = self.request.POST.get('text')
 
-        Answer.objects.create(user=user, question=question, text=text)
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.question = get_object_or_404(Question, slug=slug)
 
-        return HttpResponseRedirect(reverse('forum:detail', kwargs={'slug': slug}))
+        # Refactor this.
+        instance.question.views -= 1
+        instance.question.save()
+
+        return super(AnswerCreate, self).form_valid(form)
