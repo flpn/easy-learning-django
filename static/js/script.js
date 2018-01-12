@@ -26,7 +26,7 @@ $(document).ready(() => {
                     }
                 },
                 error: (error) => {
-                    console.log(error)
+                    alert('Você precisa estar logado para votar!')
                     console.log('error')
                 }
             })

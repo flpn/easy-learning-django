@@ -57,7 +57,7 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'forum/question_update.html'
     form_class = QuestionForm
     model = Question
-
+    
 
 class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     model = Question
