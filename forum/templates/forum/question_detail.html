@@ -17,18 +17,18 @@
     <hr>
 
     {% for answer in question.answer_set.all %}
-        <div class="row">
-            <p>{{ answer.text }}</p>
-            <small>por: {{ answer.user.username }}</small>
-        </div>    
-        
+        <p>{{ answer.text }} </p><br/>
+        <p><small> por: {{ answer.user.username }}</small></p>
+        <hr>
+                
         {% empty %}
         <p>Nenhuma resposta foi publicada.</p>
     {% endfor %}
     
-    <form method="post">
+    <form method="post" action="{% url 'forum:answer' question.slug %}">
         {% csrf_token %}
-        <textarea name="" id="" cols="30" rows="5"></textarea>
+        <input hidden type="text" name="slug" value="{{ question.slug }}">
+        <textarea name="text" id="" cols="30" rows="5"></textarea>
         <button type="submit">Responder</button>
     </form>
 {% endblock  %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView, DeleteView, View
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
-from .models import Question
+from .models import Question, Answer
 from .forms import QuestionForm
 
 
@@ -96,3 +96,15 @@ class QuestionToggleLikeAPI(APIView):
         data = {'updated': updated, 'liked': liked}
 
         return Response(data)
+
+
+class CreateAnswer(View):
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        slug = self.request.POST.get('slug')
+        question = get_object_or_404(Question, slug=slug)
+        text = self.request.POST.get('text')
+
+        Answer.objects.create(user=user, question=question, text=text)
+
+        return HttpResponseRedirect(reverse('forum:detail', kwargs={'slug': slug}))
