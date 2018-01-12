@@ -59,12 +59,12 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     model = Question
 
 
-class QuestionDeleteView(DeleteView):
+class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     model = Question
     success_url = reverse_lazy('forum:questions')
 
 
-class QuestionToggleLike(RedirectView):
+class QuestionToggleLike(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
         question = get_object_or_404(Question, slug=slug)
@@ -80,7 +80,7 @@ class QuestionToggleLike(RedirectView):
         return url_
 
 
-class QuestionToggleLikeAPI(APIView):
+class QuestionToggleLikeAPI(LoginRequiredMixin, APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -104,7 +104,7 @@ class QuestionToggleLikeAPI(APIView):
         return Response(data)
 
 
-class AnswerCreate(CreateView):
+class AnswerCreate(LoginRequiredMixin, CreateView):
     template_name = 'forum/question_detail.html'
     form_class = AnswerForm
 
